@@ -1,57 +1,126 @@
 package pnm.kdtree1;
 
+/**
+ * Represents a 2D map for managing geographical locations where each location can offer various services.
+ * This implementation uses a KD-Tree to efficiently handle spatial queries such as nearest neighbor searches.
+ */
 public class Map2D implements Map2DADT {
     private MapNode root = null;
 
+    /**
+     * Adds a new place with specified coordinates and place details to the map.
+     * This is the public method that starts the recursive process of adding a new node.
+     *
+     * @param x     the x-coordinate of the new place.
+     * @param y     the y-coordinate of the new place.
+     * @param place the details of the new place including the services it offers.
+     */
     public void add(int x, int y, Place place) {
         root = add(root, new Point(x, y), place, true);
     }
 
+    /**
+     * Recursively adds a new node to the KD-Tree based on x and y coordinates.
+     * This method uses the 'vertical' parameter to decide the dimension (x or y) to compare at each level of the tree.
+     *
+     * @param node     the current node in the KD-Tree during the recursion.
+     * @param point    the point containing x and y coordinates where the new place should be added.
+     * @param place    the place details to be stored at the point.
+     * @param vertical a boolean flag that indicates whether to compare x-coordinates (true) or y-coordinates (false).
+     * @return the new node if created, or the updated subtree root after insertion.
+     */
     private MapNode add(MapNode node, Point point, Place place, boolean vertical) {
         if (node == null) {
-            return new MapNode(point, place);
+            return new MapNode(point, place); // Create and return a new node if the current position in the tree is empty.
         }
+        // Determine whether to go left or right in the tree by comparing the appropriate coordinate based on the current level.
         if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
-            node.left = add(node.left, point, place, !vertical);
+            node.left = add(node.left, point, place, !vertical); // Go left if the new point's coordinate is less than the current node's.
         } else {
-            node.right = add(node.right, point, place, !vertical);
+            node.right = add(node.right, point, place, !vertical); // Otherwise, go right.
         }
-        return node;
+        return node; // Return the current node after inserting the new node in the correct position.
     }
 
+    /**
+     * Removes a place from the map at the specified coordinates.
+     * This is the public method that initiates the recursive deletion process.
+     *
+     * @param x the x-coordinate of the place to be deleted.
+     * @param y the y-coordinate of the place to be deleted.
+     */
     public void delete(int x, int y) {
         root = delete(root, new Point(x, y), true);
     }
 
+    /**
+     * Recursively removes a node from the KD-Tree.
+     * This method adjusts the tree structure to maintain its properties after the deletion.
+     *
+     * @param node     the current node being examined in the KD-Tree.
+     * @param point    the point that specifies the x and y coordinates for deletion.
+     * @param vertical a boolean flag that indicates whether the current depth is comparing x or y coordinates.
+     * @return the new root of the subtree after the deletion.
+     */
     private MapNode delete(MapNode node, Point point, boolean vertical) {
         if (node == null) {
-            throw new RuntimeException("Point not found!");
+            throw new RuntimeException("Point not found!"); // Point to delete does not exist.
         }
         if (node.getPoint().isEqual(point.x, point.y)) {
-            if (node.hasTwoChildren()) {
-                MapNode min = findMin(node.right, vertical);
-                node.setPoint(min.getPoint());
-                node.right = delete(node.right, min.getPoint(), !vertical);
-                return node;
-            } else {
-                return node.left != null ? node.left : node.right;
-            }
-        } else if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
-            node.left = delete(node.left, point, !vertical);
-        } else {
-            node.right = delete(node.right, point, !vertical);
+            return handleDeletion(node, vertical); // Node found, handle its deletion.
         }
-        return node;
+        // Determine whether to search left or right in the tree for the point to delete.
+        if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
+            node.left = delete(node.left, point, !vertical); // Search left subtree.
+        } else {
+            node.right = delete(node.right, point, !vertical); // Search right subtree.
+        }
+        return node; // Return the node itself if no deletion occurs at this level.
     }
 
+    /**
+     * Handles the deletion of a node that matches the delete query.
+     * This method considers different cases such as node with two children, one child, or no children.
+     *
+     * @param node     the node to be deleted.
+     * @param vertical a boolean indicating the dimension used for comparison at this level.
+     * @return the new subtree root after deletion of the node.
+     */
+    private MapNode handleDeletion(MapNode node, boolean vertical) {
+        if (node.hasTwoChildren()) {
+            MapNode min = findMin(node.right, vertical); // Find the minimum node from the right subtree.
+            node.setPoint(min.getPoint()); // Replace current node's point with that of the minimum node.
+            node.right = delete(node.right, min.getPoint(), !vertical); // Delete the minimum node from the right subtree.
+        } else {
+            return (node.left != null) ? node.left : node.right; // Return either the left child or right child, whichever is non-null.
+        }
+        return node; // Return the node if it has two children and replacements are done.
+    }
+
+    /**
+     * Finds the minimum node in a subtree based on the 'vertical' parameter.
+     * If 'vertical' is true, it finds the minimum x-value; otherwise, it finds the minimum y-value.
+     *
+     * @param node     the subtree in which to find the minimum value.
+     * @param vertical a boolean indicating whether to compare x-values or y-values.
+     * @return the node with the minimum value in the specified dimension.
+     */
     private MapNode findMin(MapNode node, boolean vertical) {
         MapNode current = node;
         while (current.left != null) {
-            current = current.left;
+            current = current.left; // Continue moving left to find the minimum.
         }
-        return current;
+        return current; // The leftmost node is the minimum.
     }
 
+    /**
+     * Adds a service to a point on the map.
+     *
+     * @param x       the x-coordinate of the point.
+     * @param y       the y-coordinate of the point.
+     * @param service the service to add.
+     * @return true if the service was added successfully, false otherwise.
+     */
     public boolean addServiceToPoint(int x, int y, ServiceType service) {
         MapNode node = findNode(root, x, y);
         if (node != null && node.getPlace() != null) {
@@ -61,6 +130,14 @@ public class Map2D implements Map2DADT {
         return false;
     }
 
+    /**
+     * Removes a service from a point on the map.
+     *
+     * @param x       the x-coordinate of the point.
+     * @param y       the y-coordinate of the point.
+     * @param service the service to remove.
+     * @return true if the service was removed successfully, false otherwise.
+     */
     public boolean removeServiceFromPoint(int x, int y, ServiceType service) {
         MapNode node = findNode(root, x, y);
         if (node != null && node.getPlace() != null) {
@@ -70,6 +147,14 @@ public class Map2D implements Map2DADT {
         return false;
     }
 
+    /**
+     * Finds the node corresponding to the given coordinates in the KD-Tree.
+     *
+     * @param node the current node being examined.
+     * @param x    the x-coordinate of the point.
+     * @param y    the y-coordinate of the point.
+     * @return the node containing the specified coordinates, or null if not found.
+     */
     private MapNode findNode(MapNode node, int x, int y) {
         if (node == null) {
             return null;
@@ -83,6 +168,15 @@ public class Map2D implements Map2DADT {
         }
     }
 
+    /**
+     * Finds the k closest points to a target point on the map that offer a specific service.
+     *
+     * @param targetX     the x-coordinate of the target point.
+     * @param targetY     the y-coordinate of the target point.
+     * @param k           the number of closest points to find.
+     * @param serviceType the type of service to filter by.
+     * @return a 2D array containing the coordinates of the k closest points.
+     */
     public int[][] findKClosestPointsByService(int targetX, int targetY, int k, ServiceType serviceType) {
         MaxHeap pq = new MaxHeap(k, targetX, targetY);
         findKClosestPointsByService(root, targetX, targetY, k, true, pq, serviceType);
@@ -94,6 +188,17 @@ public class Map2D implements Map2DADT {
         return sortResults(result, targetX, targetY);
     }
 
+    /**
+     * Recursively finds the k closest points to a target point on the map that offer a specific service.
+     *
+     * @param node        the current node being examined.
+     * @param targetX     the x-coordinate of the target point.
+     * @param targetY     the y-coordinate of the target point.
+     * @param k           the number of closest points to find.
+     * @param vertical    a boolean indicating the dimension used for comparison at this level.
+     * @param pq          the max heap to store the closest points.
+     * @param serviceType the type of service to filter by.
+     */
     private void findKClosestPointsByService(MapNode node, int targetX, int targetY, int k, boolean vertical, MaxHeap pq, ServiceType serviceType) {
         if (node == null) return;
 
@@ -112,12 +217,30 @@ public class Map2D implements Map2DADT {
         }
     }
 
+    /**
+     * Searches for points on the map that offer a specific service within a given bounding rectangle.
+     *
+     * @param bounds      the bounding rectangle to search within.
+     * @param service     the type of service to filter by.
+     * @param k           the maximum number of points to return.
+     * @return a 2D array containing the coordinates of points that offer the service within the bounds.
+     */
     public int[][] searchByServiceWithinBounds(Rectangle bounds, ServiceType service, int k) {
         SimpleList result = new SimpleList(k);
         searchWithinBounds(root, bounds, service, result, k, true);
         return sortResults(result, bounds.centerX(), bounds.centerY());
     }
 
+    /**
+     * Recursively searches for points on the map that offer a specific service within a given bounding rectangle.
+     *
+     * @param node        the current node being examined.
+     * @param bounds      the bounding rectangle to search within.
+     * @param service     the type of service to filter by.
+     * @param results     the list to store the matching points.
+     * @param k           the maximum number of points to return.
+     * @param vertical    a boolean indicating the dimension used for comparison at this level.
+     */
     private void searchWithinBounds(MapNode node, Rectangle bounds, ServiceType service, SimpleList results, int k, boolean vertical) {
         if (node == null || results.size() >= k) return;
 
@@ -147,6 +270,14 @@ public class Map2D implements Map2DADT {
         }
     }
 
+    /**
+     * Sorts the results based on their distance to the center of the bounding box.
+     *
+     * @param points  the list of points to be sorted.
+     * @param centerX the x-coordinate of the center of the bounding box.
+     * @param centerY the y-coordinate of the center of the bounding box.
+     * @return a 2D array containing the sorted coordinates of the points.
+     */
     private int[][] sortResults(SimpleList points, int centerX, int centerY) {
         // Insertion sort based on distance to the center of the bounding box
         for (int i = 1; i < points.size(); i++) {
@@ -161,6 +292,15 @@ public class Map2D implements Map2DADT {
         return points.toArray();
     }
 
+    /**
+     * Compares the distance between two points and the center of the bounding box.
+     *
+     * @param a       the first point.
+     * @param centerX the x-coordinate of the center of the bounding box.
+     * @param centerY the y-coordinate of the center of the bounding box.
+     * @param b       the second point.
+     * @return 0 if both points are equidistant from the center, a positive value if point a is closer, and a negative value if point b is closer.
+     */
     private int compareDistance(int[] a, int centerX, int centerY, int[] b) {
         long distA = (long) (a[0] - centerX) * (a[0] - centerX) + (long) (a[1] - centerY) * (a[1] - centerY);
         long distB = (long) (b[0] - centerX) * (b[0] - centerX) + (long) (b[1] - centerY) * (b[1] - centerY);
@@ -185,15 +325,20 @@ public class Map2D implements Map2DADT {
     }
 }
 
+/**
+ * Represents a node in the KD-Tree.
+ */
 class MapNode {
     private Point coordinates;
     private Place place;
     MapNode left = null, right = null;
 
-    public MapNode(Point coordinates) {
-        this.coordinates = coordinates;
-    }
-
+    /**
+     * Constructs a MapNode with the given coordinates and place details.
+     *
+     * @param coordinates the coordinates of the node.
+     * @param place       the place details associated with the node.
+     */
     public MapNode(Point coordinates, Place place) {
         this.coordinates = coordinates;
         this.place = place;
@@ -215,6 +360,11 @@ class MapNode {
         return coordinates.x == x && coordinates.y == y;
     }
 
+    /**
+     * Checks if the node has two children.
+     *
+     * @return true if the node has two children, otherwise false.
+     */
     public boolean hasTwoChildren() {
         return left != null && right != null;
     }
