@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.txt" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/KDTree2D.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/SimpleQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/kdtree1/SimpleQueue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,6 +16,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -43,6 +39,7 @@
     "Application.Map2DTest.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "pnm__dev",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/pnm/Developer/projects/map_application/src/pnm/quadtree1",
@@ -112,7 +109,7 @@
       <workItem from="1713337678819" duration="22000" />
       <workItem from="1713337720429" duration="2237000" />
       <workItem from="1713340234722" duration="6000" />
-      <workItem from="1713340250387" duration="7085000" />
+      <workItem from="1713340250387" duration="13017000" />
     </task>
     <servers />
   </component>

@@ -31,15 +31,16 @@ public class Map2D implements Map2DADT {
      */
     private MapNode add(MapNode node, Point point, Place place, boolean vertical) {
         if (node == null) {
-            return new MapNode(point, place); // Create and return a new node if the current position in the tree is empty.
+            return new MapNode(point, place);
         }
-        // Determine whether to go left or right in the tree by comparing the appropriate coordinate based on the current level.
+
         if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
-            node.left = add(node.left, point, place, !vertical); // Go left if the new point's coordinate is less than the current node's.
+            node.left = add(node.left, point, place, !vertical);
         } else {
-            node.right = add(node.right, point, place, !vertical); // Otherwise, go right.
+            node.right = add(node.right, point, place, !vertical);
         }
-        return node; // Return the current node after inserting the new node in the correct position.
+
+        return balance(node, vertical);
     }
 
     /**
@@ -64,37 +65,72 @@ public class Map2D implements Map2DADT {
      */
     private MapNode delete(MapNode node, Point point, boolean vertical) {
         if (node == null) {
-            throw new RuntimeException("Point not found!"); // Point to delete does not exist.
+            return null; // Nothing to delete
         }
+
         if (node.getPoint().isEqual(point.x, point.y)) {
-            return handleDeletion(node, vertical); // Node found, handle its deletion.
-        }
-        // Determine whether to search left or right in the tree for the point to delete.
-        if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
-            node.left = delete(node.left, point, !vertical); // Search left subtree.
+            if (node.left == null || node.right == null) {
+                return node.left != null ? node.left : node.right;
+            } else {
+                MapNode min = findMin(node.right, !vertical);
+                node.setPoint(min.getPoint());
+                node.setPlace(min.getPlace());
+                node.right = delete(node.right, min.getPoint(), !vertical);
+            }
+        } else if (vertical ? point.x < node.getPoint().x : point.y < node.getPoint().y) {
+            node.left = delete(node.left, point, !vertical);
         } else {
-            node.right = delete(node.right, point, !vertical); // Search right subtree.
+            node.right = delete(node.right, point, !vertical);
         }
-        return node; // Return the node itself if no deletion occurs at this level.
+
+        return balance(node, vertical);
     }
 
-    /**
-     * Handles the deletion of a node that matches the delete query.
-     * This method considers different cases such as node with two children, one child, or no children.
-     *
-     * @param node     the node to be deleted.
-     * @param vertical a boolean indicating the dimension used for comparison at this level.
-     * @return the new subtree root after deletion of the node.
-     */
-    private MapNode handleDeletion(MapNode node, boolean vertical) {
-        if (node.hasTwoChildren()) {
-            MapNode min = findMin(node.right, vertical); // Find the minimum node from the right subtree.
-            node.setPoint(min.getPoint()); // Replace current node's point with that of the minimum node.
-            node.right = delete(node.right, min.getPoint(), !vertical); // Delete the minimum node from the right subtree.
-        } else {
-            return (node.left != null) ? node.left : node.right; // Return either the left child or right child, whichever is non-null.
+    private MapNode rotateRight(MapNode y) {
+        MapNode x = y.left;
+        MapNode T2 = x.right;
+
+        x.right = y;
+        y.left = T2;
+
+        y.updateHeight();
+        x.updateHeight();
+
+        return x;
+    }
+
+    private MapNode rotateLeft(MapNode x) {
+        MapNode y = x.right;
+        MapNode T2 = y.left;
+
+        y.left = x;
+        x.right = T2;
+
+        x.updateHeight();
+        y.updateHeight();
+
+        return y;
+    }
+
+    private MapNode balance(MapNode node, boolean vertical) {
+        if (node == null) return null;
+
+        node.updateHeight();
+        int balance = node.getBalance();
+
+        if (balance > 1) {
+            if (node.left != null && node.left.getBalance() < 0) {
+                node.left = rotateLeft(node.left);
+            }
+            return rotateRight(node);
+        } else if (balance < -1) {
+            if (node.right != null && node.right.getBalance() > 0) {
+                node.right = rotateRight(node.right);
+            }
+            return rotateLeft(node);
         }
-        return node; // Return the node if it has two children and replacements are done.
+
+        return node;
     }
 
     /**
@@ -108,9 +144,9 @@ public class Map2D implements Map2DADT {
     private MapNode findMin(MapNode node, boolean vertical) {
         MapNode current = node;
         while (current.left != null) {
-            current = current.left; // Continue moving left to find the minimum.
+            current = current.left;
         }
-        return current; // The leftmost node is the minimum.
+        return current;
     }
 
     /**
@@ -332,13 +368,8 @@ class MapNode {
     private Point coordinates;
     private Place place;
     MapNode left = null, right = null;
+    private int height = 1;
 
-    /**
-     * Constructs a MapNode with the given coordinates and place details.
-     *
-     * @param coordinates the coordinates of the node.
-     * @param place       the place details associated with the node.
-     */
     public MapNode(Point coordinates, Place place) {
         this.coordinates = coordinates;
         this.place = place;
@@ -348,25 +379,36 @@ class MapNode {
         return coordinates;
     }
 
-    public Place getPlace() {
-        return place;
-    }
-
     public void setPoint(Point point) {
         this.coordinates = point;
     }
 
-    public boolean isEqual(int x, int y) {
-        return coordinates.x == x && coordinates.y == y;
+    public Place getPlace() {
+        return place;
     }
 
-    /**
-     * Checks if the node has two children.
-     *
-     * @return true if the node has two children, otherwise false.
-     */
-    public boolean hasTwoChildren() {
-        return left != null && right != null;
+    public void setPlace(Place place) {
+        this.place = place;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void updateHeight() {
+        height = 1 + Math.max(height(left), height(right));
+    }
+
+    private static int height(MapNode node) {
+        return node == null ? 0 : node.getHeight();
+    }
+
+    public int getBalance() {
+        return height(left) - height(right);
+    }
+
+    public boolean isEqual(int x, int y) {
+        return coordinates.x == x && coordinates.y == y;
     }
 }
 
