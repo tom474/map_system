@@ -5,7 +5,7 @@ import java.util.List;
 
 class QuadTree {
 
-    private final int MAX_CAPACITY = 4;
+    private final int MAX_CAPACITY = 10;
     private int level;
     private List<Point> points;
     private Rectangle bounds;

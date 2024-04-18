@@ -1,17 +1,17 @@
 package pnm.kdtree1;
 
-public class SimpleQueue {
-    private static class Node {
-        KDNode kdNode;
-        Node next;
+public class SimpleQueue<T> {
+    private static class Node<T> {
+        T data; // Use generic type T instead of specific type MapNode
+        Node<T> next;
 
-        Node(KDNode kdNode) {
-            this.kdNode = kdNode;
+        Node(T data) {
+            this.data = data;
             this.next = null;
         }
     }
 
-    private Node head, tail;
+    private Node<T> head, tail;
 
     public SimpleQueue() {
         this.head = this.tail = null;
@@ -21,8 +21,8 @@ public class SimpleQueue {
         return head == null;
     }
 
-    public void add(KDNode kdNode) {
-        Node newNode = new Node(kdNode);
+    public void add(T data) {
+        Node<T> newNode = new Node<>(data);
         if (tail == null) {
             head = tail = newNode;
         } else {
@@ -31,11 +31,11 @@ public class SimpleQueue {
         }
     }
 
-    public KDNode poll() {
+    public T poll() {
         if (isEmpty()) return null;
-        KDNode kdNode = head.kdNode;
+        T data = head.data;
         head = head.next;
         if (head == null) tail = null;
-        return kdNode;
+        return data;
     }
 }
