@@ -1,8 +1,5 @@
 package pnm.quadtree1;
 
-import java.util.ArrayList;
-import java.util.List;
-
 enum ServiceType {
     ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE;
 }
@@ -33,12 +30,20 @@ class QuadTree {
         children[2] = new QuadTree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));
         children[3] = new QuadTree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
 
-        List<Point> tempPoints = new ArrayList<>(points);
+        ArrayList<Point> tempPoints = new ArrayList<>();
+        for (int i = 0; i < points.size(); i++) {
+            tempPoints.add(points.get(i));
+        }
         points.clear();
-        for (Point p : tempPoints) {
+
+        int index = 0;
+        while (index < tempPoints.size()) {
+            Point p = tempPoints.get(index);
             insert(p);
+            index++;
         }
     }
+
 
     private int getIndex(Point point) {
         double verticalMidpoint = bounds.x + bounds.width / 2.0;
@@ -92,32 +97,37 @@ class QuadTree {
             return found;
         }
 
-        for (Point point : points) {
+        int index = 0;
+        while (index < points.size()) {
+            Point point = points.get(index);
             if (range.contains(point.x, point.y)) {
                 found.add(point);
             }
+            index++;
         }
 
         if (children[0] != null) {
-            for (QuadTree child : children) {
-                child.query(range, found);
+            int childIndex = 0;
+            while (childIndex < children.length) {
+                children[childIndex].query(range, found);
+                childIndex++;
             }
         }
 
         return found;
     }
 
-    public void print(String indent) {
-        System.out.println(indent + "Node Bounds: " + bounds + " | Points: " + points.size());
-        for (Point point : points) {
-            System.out.println(indent + "  Point: " + point);
-        }
-        if (children[0] != null) {
-            for (QuadTree child : children) {
-                child.print(indent + "  ");
-            }
-        }
-    }
+//    public void print(String indent) {
+//        System.out.println(indent + "Node Bounds: " + bounds + " | Points: " + points.size());
+//        for (Point point : points) {
+//            System.out.println(indent + "  Point: " + point);
+//        }
+//        if (children[0] != null) {
+//            for (QuadTree child : children) {
+//                child.print(indent + "  ");
+//            }
+//        }
+//    }
 }
 
 class Point {
