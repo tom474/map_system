@@ -25,6 +25,8 @@ public interface List<E> {
      */
     boolean remove(E element);
 
+    void removeAt(int index);
+
     /**
      * Retrieves the element at the specified position in this list.
      *

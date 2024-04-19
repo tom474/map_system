@@ -3,7 +3,7 @@ package pnm.quadtree1;
 import java.util.Random;
 
 public class QuadTreeTest {
-    private static final int NUM_POINTS = 100000000; // 10 million points
+    private static final int NUM_POINTS = 100000000;
     private static final int MAX_COORDINATE = 10000000; // Maximum coordinate value
 
     public static void main(String[] args) {
@@ -26,6 +26,13 @@ public class QuadTreeTest {
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Insertion of " + NUM_POINTS + " points completed in " + (endTime - startTime) + " ms");
+
+        // Insert n-th point
+        long insertStartTime = System.currentTimeMillis();
+        Point point = new Point(234133, 517823, ServiceType.ATM);
+        quadTree.insert(point);
+        long insertEndTime = System.currentTimeMillis();
+        System.out.println("Insertion of 1 point completed in " + (insertEndTime - insertStartTime) + " ms");
 
         // Optionally, you can also test querying or deleting some points here
         long queryStartTime = System.currentTimeMillis();

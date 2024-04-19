@@ -1,16 +1,15 @@
 package pnm.quadtree1;
 
 enum ServiceType {
-    ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE;
+    ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE
 }
 
 class QuadTree {
-
-    private static final int MAX_CAPACITY = 100000;
-    private int level;
-    private List<Point> points;
-    private Rectangle bounds;
-    private QuadTree[] children;
+    private static final int MAX_CAPACITY = 1000000;
+    private final int level;
+    private final List<Point> points;
+    private final Rectangle bounds;
+    private final QuadTree[] children;
 
     public QuadTree(int level, Rectangle bounds) {
         this.level = level;
@@ -30,18 +29,12 @@ class QuadTree {
         children[2] = new QuadTree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));
         children[3] = new QuadTree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
 
-        ArrayList<Point> tempPoints = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
-            tempPoints.add(points.get(i));
+            Point point = points.get(i);
+            int index = getIndex(point);
+            children[index].points.add(point);
         }
         points.clear();
-
-        int index = 0;
-        while (index < tempPoints.size()) {
-            Point p = tempPoints.get(index);
-            insert(p);
-            index++;
-        }
     }
 
 
@@ -49,7 +42,6 @@ class QuadTree {
         double verticalMidpoint = bounds.x + bounds.width / 2.0;
         double horizontalMidpoint = bounds.y + bounds.height / 2.0;
         boolean topQuadrant = (point.y < horizontalMidpoint);
-        boolean bottomQuadrant = (point.y >= horizontalMidpoint);
         boolean leftQuadrant = (point.x < verticalMidpoint);
 
         if (leftQuadrant) {
@@ -80,8 +72,11 @@ class QuadTree {
             return false;
         }
 
-        if (points.remove(point)) {
-            return true;
+        for (int i = 0; i < points.size(); i++) {
+            if (points.get(i).equals(point)) {
+                points.removeAt(i);
+                return true;
+            }
         }
 
         if (children[0] != null) {
@@ -97,37 +92,21 @@ class QuadTree {
             return found;
         }
 
-        int index = 0;
-        while (index < points.size()) {
-            Point point = points.get(index);
+        for (int i = 0; i < points.size(); i++) {
+            Point point = points.get(i);
             if (range.contains(point.x, point.y)) {
                 found.add(point);
             }
-            index++;
         }
 
         if (children[0] != null) {
-            int childIndex = 0;
-            while (childIndex < children.length) {
+            for (int childIndex = 0; childIndex < children.length; childIndex++) {
                 children[childIndex].query(range, found);
-                childIndex++;
             }
         }
 
         return found;
     }
-
-//    public void print(String indent) {
-//        System.out.println(indent + "Node Bounds: " + bounds + " | Points: " + points.size());
-//        for (Point point : points) {
-//            System.out.println(indent + "  Point: " + point);
-//        }
-//        if (children[0] != null) {
-//            for (QuadTree child : children) {
-//                child.print(indent + "  ");
-//            }
-//        }
-//    }
 }
 
 class Point {
@@ -142,8 +121,7 @@ class Point {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Point) {
-            Point other = (Point) obj;
+        if (obj instanceof Point other) {
             return x == other.x && y == other.y && serviceType == other.serviceType;
         }
         return false;

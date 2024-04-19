@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pnm/quadtree1/ArrayList.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" afterDir="false" />
     </list>
@@ -24,6 +24,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="pnm_dev" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectColorInfo">{
@@ -43,7 +48,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "pnm__dev",
+    "git-widget-placeholder": "quadtree__optimize",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/pnm/Developer/projects/map_application/src/pnm/quadtree1",
     "node.js.detected.package.eslint": "true",
@@ -103,6 +108,8 @@
         <item itemvalue="Application.QuadTreeTest" />
         <item itemvalue="Application.Map2DTest" />
         <item itemvalue="Application.Main" />
+        <item itemvalue="Application.QuadTreeTest" />
+        <item itemvalue="Application.Map2DTest" />
       </list>
     </recent_temporary>
   </component>
