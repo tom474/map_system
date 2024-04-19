@@ -428,11 +428,6 @@ class Point {
 enum ServiceType {
     ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE;
 
-    // Getting a hash code directly from enum ordinal
-    public int getHashCode() {
-        return this.ordinal();
-    }
-
     public static int size() {
         return ServiceType.values().length;
     }

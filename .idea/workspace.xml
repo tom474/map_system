@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +40,7 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "Application.Map2DTest.executor": "Run",
+    "Application.QuadTreeTest.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -61,7 +65,7 @@
       <recent name="$PROJECT_DIR$/src/pnm/kdtree1" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Map2DTest">
+  <component name="RunManager" selected="Application.QuadTreeTest">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="map_application" />
@@ -82,8 +86,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="QuadTreeTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pnm.quadtree1.QuadTreeTest" />
+      <module name="map_application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pnm.quadtree1.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.QuadTreeTest" />
         <item itemvalue="Application.Map2DTest" />
         <item itemvalue="Application.Main" />
       </list>
@@ -109,7 +127,7 @@
       <workItem from="1713337678819" duration="22000" />
       <workItem from="1713337720429" duration="2237000" />
       <workItem from="1713340234722" duration="6000" />
-      <workItem from="1713340250387" duration="13017000" />
+      <workItem from="1713340250387" duration="18808000" />
     </task>
     <servers />
   </component>
