@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreePerformanceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" afterDir="false" />
     </list>
@@ -18,8 +18,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -44,6 +44,7 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "Application.Map2DTest.executor": "Run",
+    "Application.QuadTreePerformanceTest.executor": "Run",
     "Application.QuadTreeTest.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -90,6 +91,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="QuadTreePerformanceTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pnm.quadtree1.QuadTreePerformanceTest" />
+      <module name="map_application" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pnm.quadtree1.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="QuadTreeTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="pnm.quadtree1.QuadTreeTest" />
       <module name="map_application" />
@@ -106,10 +120,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.QuadTreeTest" />
+        <item itemvalue="Application.QuadTreePerformanceTest" />
         <item itemvalue="Application.Map2DTest" />
         <item itemvalue="Application.Main" />
         <item itemvalue="Application.QuadTreeTest" />
-        <item itemvalue="Application.Map2DTest" />
       </list>
     </recent_temporary>
   </component>

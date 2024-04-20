@@ -1,20 +1,18 @@
 package pnm.quadtree1;
 
-enum ServiceType {
-    ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE
-}
+import pnm.kdtree1.SimpleList;
 
 class QuadTree {
     private static final int MAX_CAPACITY = 1000000;
     private final int level;
-    private final List<Point> points;
+    private final List<Place> places;
     private final Rectangle bounds;
     private final QuadTree[] children;
 
     public QuadTree(int level, Rectangle bounds) {
         this.level = level;
         this.bounds = bounds;
-        this.points = new ArrayList<>();
+        this.places = new ArrayList<>();
         this.children = new QuadTree[4];
     }
 
@@ -29,14 +27,13 @@ class QuadTree {
         children[2] = new QuadTree(level + 1, new Rectangle(x, y + subHeight, subWidth, subHeight));
         children[3] = new QuadTree(level + 1, new Rectangle(x + subWidth, y + subHeight, subWidth, subHeight));
 
-        for (int i = 0; i < points.size(); i++) {
-            Point point = points.get(i);
-            int index = getIndex(point);
-            children[index].points.add(point);
+        for (int i = 0; i < places.size(); i++) {
+            Place place = places.get(i);
+            int index = getIndex(place.placeCoor);
+            children[index].places.add(place);
         }
-        points.clear();
+        places.clear();
     }
-
 
     private int getIndex(Point point) {
         double verticalMidpoint = bounds.x + bounds.width / 2.0;
@@ -51,51 +48,51 @@ class QuadTree {
         }
     }
 
-    public void insert(Point point) {
-        if (!bounds.contains(point.x, point.y)) {
-            throw new IllegalArgumentException("Point " + point + " is out of the bounds of the quad tree");
+    public void insert(Place place) {
+        if (!bounds.contains(place.placeCoor.x, place.placeCoor.y)) {
+            throw new IllegalArgumentException("Place " + place + " is out of the bounds of the quad tree");
         }
 
-        if (points.size() < MAX_CAPACITY && children[0] == null) {
-            points.add(point);
+        if (places.size() < MAX_CAPACITY && children[0] == null) {
+            places.add(place);
         } else {
             if (children[0] == null) {
                 split();
             }
-            int index = getIndex(point);
-            children[index].insert(point);
+            int index = getIndex(place.placeCoor);
+            children[index].insert(place);
         }
     }
 
-    public boolean delete(Point point) {
-        if (!bounds.contains(point.x, point.y)) {
+    public boolean delete(Place place) {
+        if (!bounds.contains(place.placeCoor.x, place.placeCoor.y)) {
             return false;
         }
 
-        for (int i = 0; i < points.size(); i++) {
-            if (points.get(i).equals(point)) {
-                points.removeAt(i);
+        for (int i = 0; i < places.size(); i++) {
+            if (places.get(i).equals(place)) {
+                places.removeAt(i);
                 return true;
             }
         }
 
         if (children[0] != null) {
-            int index = getIndex(point);
-            return children[index].delete(point);
+            int index = getIndex(place.placeCoor);
+            return children[index].delete(place);
         }
 
         return false;
     }
 
-    public List<Point> query(Rectangle range, List<Point> found) {
+    public List<Place> query(Rectangle range, List<Place> found) {
         if (!bounds.intersects(range)) {
             return found;
         }
 
-        for (int i = 0; i < points.size(); i++) {
-            Point point = points.get(i);
-            if (range.contains(point.x, point.y)) {
-                found.add(point);
+        for (int i = 0; i < places.size(); i++) {
+            Place place = places.get(i);
+            if (range.contains(place.placeCoor.x, place.placeCoor.y)) {
+                found.add(place);
             }
         }
 
@@ -109,32 +106,65 @@ class QuadTree {
     }
 }
 
+
 class Point {
     int x, y;
-    ServiceType serviceType;
 
-    public Point(int x, int y, ServiceType serviceType) {
+    public Point(int x, int y) {
         this.x = x;
         this.y = y;
-        this.serviceType = serviceType;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Point other) {
-            return x == other.x && y == other.y && serviceType == other.serviceType;
+    public boolean isEqual(int x, int y) {
+        return this.x == x && this.y == y;
+    }
+}
+
+enum ServiceType {
+    ATM, RESTAURANT, HOSPITAL, GAS_STATION, COFFEE_SHOP, GROCERY_STORE, PHARMACY, HOTEL, BANK, BOOK_STORE;
+
+    public static int size() {
+        return ServiceType.values().length;
+    }
+}
+
+class Place {
+    protected Point placeCoor;
+    protected boolean[] services;  // Boolean array to track which services are offered
+
+    public Place(Point coordinates, boolean[] services) {
+        this.placeCoor = coordinates;
+        this.services = services;
+    }
+
+    public Place(Point placeCoor, ServiceType[] servicesToAdd) {
+        this.placeCoor = placeCoor;
+        this.services = new boolean[ServiceType.size()];  // Initialize the boolean array for services
+        for (ServiceType service : servicesToAdd) {
+            addService(service);  // Add each service to the place
         }
-        return false;
     }
 
-    @Override
-    public int hashCode() {
-        return x * 31 + y * 17 + serviceType.hashCode();
+    public boolean offersService(ServiceType service) {
+        return services[service.ordinal()];  // Return the service availability based on its ordinal
     }
 
-    @Override
-    public String toString() {
-        return "Point{" + "x=" + x + ", y=" + y + ", serviceType=" + serviceType + '}';
+    public void addService(ServiceType service) {
+        services[service.ordinal()] = true;  // Mark the service as offered
+    }
+
+    public void removeService(ServiceType service) {
+        services[service.ordinal()] = false;  // Mark the service as not offered
+    }
+
+    public int[][] getServices() {
+        SimpleList serviceList = new SimpleList(ServiceType.size());  // Create a new simple list to collect services
+        for (ServiceType service : ServiceType.values()) {
+            if (offersService(service)) {
+                serviceList.add(new int[] {service.ordinal()});  // Add the service ordinal to the list
+            }
+        }
+        return serviceList.toArray();  // Convert the list of services to an array and return
     }
 }
 
