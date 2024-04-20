@@ -87,6 +87,24 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
+     * Replaces the element at the specified position in this list with the specified element.
+     *
+     * @param index index of the element to replace
+     * @param element element to be stored at the specified position
+     * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= size())
+     */
+    public E set(int index, E element) {
+        if (index >= size || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        E oldValue = (E) elements[index]; // Cast needed because elements is an Object array
+        elements[index] = element;
+        return oldValue;
+    }
+
+
+    /**
      * Returns the index of the first occurrence of the specified element in this list,
      * or -1 if this list does not contain the element.
      *
