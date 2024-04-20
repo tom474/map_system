@@ -1,5 +1,3 @@
-package pnm.kdtree1;
-
 public class MaxHeap {
     private int[][] heap;
     private int size;

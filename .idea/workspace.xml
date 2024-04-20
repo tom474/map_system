@@ -5,10 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreePerformanceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2D.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DADT.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/Map2DTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/MaxHeap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MaxHeap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/SimpleList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SimpleList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/kdtree1/SimpleQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SimpleQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/ArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ArrayList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/List.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/List.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/QuadTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pnm/quadtree1/QuadTreeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/QuadTreeTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +57,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "quadtree__optimize",
+    "git-widget-placeholder": "final",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/Users/pnm/Developer/projects/map_application/src/pnm/quadtree1",
     "node.js.detected.package.eslint": "true",
@@ -96,7 +104,7 @@
       <module name="map_application" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="pnm.quadtree1.*" />
+          <option name="PATTERN" value=".*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -105,11 +113,11 @@
       </method>
     </configuration>
     <configuration name="QuadTreeTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="pnm.quadtree1.QuadTreeTest" />
+      <option name="MAIN_CLASS_NAME" value="QuadTreeTest" />
       <module name="map_application" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="pnm.quadtree1.*" />
+          <option name="PATTERN" value=".*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>

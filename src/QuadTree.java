@@ -1,7 +1,3 @@
-package pnm.quadtree1;
-
-import pnm.kdtree1.SimpleList;
-
 class QuadTree {
     private static final int MAX_CAPACITY = 1000000;
     private final int level;

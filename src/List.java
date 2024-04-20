@@ -1,5 +1,3 @@
-package pnm.quadtree1;
-
 /**
  * The List interface defines a general contract for list operations.
  * This interface is designed to be implemented by classes that manage collections of elements in a list format,

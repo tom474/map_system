@@ -1,5 +1,3 @@
-package pnm.quadtree1;
-
 import java.util.Random;
 
 public class QuadTreeTest {

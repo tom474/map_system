@@ -1,5 +1,3 @@
-package pnm.kdtree1;
-
 public class SimpleList {
     private int[][] elements;
     private int count = 0;

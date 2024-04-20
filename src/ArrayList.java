@@ -1,5 +1,3 @@
-package pnm.quadtree1;
-
 /**
  * A simple implementation of a list using a dynamic array to store elements.
  * This custom ArrayList class mimics some of the functionalities of the Java Collection Framework's ArrayList,

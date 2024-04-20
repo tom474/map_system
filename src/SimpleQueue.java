@@ -1,5 +1,3 @@
-package pnm.kdtree1;
-
 public class SimpleQueue<T> {
     private static class Node<T> {
         T data; // Use generic type T instead of specific type MapNode
