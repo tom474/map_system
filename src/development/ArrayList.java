@@ -1,3 +1,5 @@
+package development;
+
 /**
  * A simple implementation of a list using a dynamic array to store elements.
  * This custom ArrayList class mimics some of the functionalities of the Java Collection Framework's ArrayList,
@@ -5,16 +7,14 @@
  *
  * @param <E> the type of elements in this list
  */
-public class ArrayList<E> implements List<E> {
-    private Object[] elements; // The array buffer into which the elements of the ArrayList are stored.
-    private int size = 0; // The current number of elements contained in the ArrayList.
+public class ArrayList<E> {
+    private Object[] elements;  // The array buffer into which the elements of the ArrayList are stored.
+    private int size = 0;       // The current number of elements contained in the ArrayList.
     private static final int DEFAULT_CAPACITY = 10; // Default initial capacity of the ArrayList.
 
-    /**
-     * Constructs an empty list with an initial capacity of ten.
-     */
+    // Constructs an empty list with an initial capacity of ten.
     public ArrayList() {
-        elements = new Object[DEFAULT_CAPACITY];
+        elements = new Place[DEFAULT_CAPACITY];
     }
 
     /**
@@ -23,9 +23,9 @@ public class ArrayList<E> implements List<E> {
      */
     private void ensureCapacity() {
         if (size == elements.length) {
-            Object[] newElements = new Object[elements.length * 2];
-            System.arraycopy(elements, 0, newElements, 0, size); // Copy existing elements to the new array
-            elements = newElements;
+            Object[] temp = new Object[elements.length * 2];
+            System.arraycopy(elements, 0, temp, 0, size);   // Copy existing elements to the new array
+            elements = temp;
         }
     }
 
@@ -34,10 +34,12 @@ public class ArrayList<E> implements List<E> {
      *
      * @param element element to be appended to this list
      */
-    @Override
     public void add(E element) {
-        ensureCapacity(); // Ensure there's enough space for the new element
-        elements[size++] = element; // Add the element and increment the size
+        // Ensure there's enough space for the new element
+        ensureCapacity();
+        // Add the element and increment the size
+        elements[size] = element;
+        size++;
     }
 
     /**
@@ -47,12 +49,10 @@ public class ArrayList<E> implements List<E> {
      * @param element element to be removed from this list, if present
      * @return true if this list contained the specified element
      */
-    @Override
     public boolean remove(E element) {
-        int index = indexOf(element); // Find the index of the element
+        int index = indexOf(element);
         if (index != -1) {
-            removeAt(index); // Remove the element by index
-            return true;
+            return removeAt(index);
         }
         return false;
     }
@@ -63,12 +63,15 @@ public class ArrayList<E> implements List<E> {
      *
      * @param index the index of the element to be removed
      */
-    public void removeAt(int index) {
-        int numMoved = size - index - 1; // Number of elements to move
-        if (numMoved > 0) {
-            System.arraycopy(elements, index + 1, elements, index, numMoved); // Shift elements left
+    public boolean removeAt(int index) {
+        if (index < 0 || index >= size) {
+            return false;
         }
-        elements[--size] = null; // Clear the slot and reduce size
+        for (int i = index; i < size - 1; i++) {
+            elements[i] = elements[i + 1];
+        }
+        size--;
+        return true;
     }
 
     /**
@@ -78,9 +81,8 @@ public class ArrayList<E> implements List<E> {
      * @return the element at the specified position in this list
      * @throws IndexOutOfBoundsException if the index is out of range
      */
-    @Override
     public E get(int index) {
-        if (index >= size || index < 0) {
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
         }
         return (E) elements[index];
@@ -95,14 +97,13 @@ public class ArrayList<E> implements List<E> {
      * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= size())
      */
     public E set(int index, E element) {
-        if (index >= size || index < 0) {
-            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        if (index < 0 || index >= size) {
+            return null;
         }
-        E oldValue = (E) elements[index]; // Cast needed because elements is an Object array
+        E oldValue = (E) elements[index];   // Cast needed because elements is an Object array
         elements[index] = element;
         return oldValue;
     }
-
 
     /**
      * Returns the index of the first occurrence of the specified element in this list,
@@ -114,7 +115,7 @@ public class ArrayList<E> implements List<E> {
      */
     public int indexOf(E element) {
         for (int i = 0; i < size; i++) {
-            if (element.equals(elements[i])) {
+            if (elements[i].equals(element)) {
                 return i;
             }
         }
@@ -122,15 +123,14 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Removes all of the elements from this list.
+     * Removes all the elements from this list.
      * The list will be empty after this call returns.
      */
-    @Override
     public void clear() {
         for (int i = 0; i < size; i++) {
-            elements[i] = null; // Clear each element to help with garbage collection
+            elements[i] = null;
         }
-        size = 0; // Reset size to zero
+        size = 0;
     }
 
     /**
@@ -138,7 +138,6 @@ public class ArrayList<E> implements List<E> {
      *
      * @return the number of elements in this list
      */
-    @Override
     public int size() {
         return size;
     }
