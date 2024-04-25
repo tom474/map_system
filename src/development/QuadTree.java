@@ -1,150 +1,145 @@
 package development;
 
 public class QuadTree {
-    private static final int MAX_CAPACITY = 1000000;
-    private ArrayList<Place> places;
-    private Rectangle boundary;
-    private QuadTree[] children;
+    private static final int CAPACITY = 10_000_000;
+    private final Rectangle boundary;
+    private final QuadTree[] children;
+    private int numOfPlaces;
+    private final int[] placeXs;
+    private final int[] placeYs;
+    private final int[] placeServices;
 
     public QuadTree(Rectangle boundary) {
         this.boundary = boundary;
-        this.places = new ArrayList();
-        this.children = new QuadTree[4];
+        children = new QuadTree[4];
+        numOfPlaces = 0;
+        placeXs = new int[CAPACITY];
+        placeYs = new int[CAPACITY];
+        placeServices = new int[CAPACITY];
     }
 
-    private int getSuitableLeaf(Point2D point) {
-        int index = -1;
-        for (int i = 0; i < 4; i++) {
-            if (children[i].boundary.contains(point)) {
-                index = i;
-                break;
-            }
+    private int getSuitableLeaf(int x, int y) {
+        int verticalMidpoint = boundary.getX() + boundary.getWidth() / 2;
+        int horizontalMidpoint = boundary.getY() - boundary.getHeight() / 2;
+        boolean topQuadrant = (y >= horizontalMidpoint);
+        boolean rightQuadrant = (x >= verticalMidpoint);
+        if (topQuadrant) {
+            return rightQuadrant ? 1 : 0;
+        } else {
+            return rightQuadrant ? 3 : 2;
         }
-        return index;
     }
 
     private void split() {
-        int x = boundary.topLeftPoint.getX();
-        int y = boundary.topLeftPoint.getY();
-        int w = boundary.width / 2;
-        int h = boundary.height / 2;
+        int subWidth = boundary.getWidth() / 2;
+        int subHeight = boundary.getHeight() / 2;
+        int x = boundary.getX();
+        int y = boundary.getY();
 
-        children[0] = new QuadTree(new Rectangle(new Point2D(x + w, y), w, h));
-        children[1] = new QuadTree(new Rectangle(new Point2D(x, y), w, h));
-        children[2] = new QuadTree(new Rectangle(new Point2D(x, y - h), w, h));
-        children[3] = new QuadTree(new Rectangle(new Point2D(x + w, y - h), w, h));
+        children[0] = new QuadTree(new Rectangle(x, y, subWidth, subHeight));                                // Top left
+        children[1] = new QuadTree(new Rectangle(x + subWidth, y, subWidth, subHeight));                  // Top right
+        children[2] = new QuadTree(new Rectangle(x, y - subHeight, subWidth, subHeight));                 // Bottom left
+        children[3] = new QuadTree(new Rectangle(x + subWidth, y - subHeight, subWidth, subHeight));   // Bottom right
 
-        for (int i = 0; i < places.size(); i++) {
-            Place place = places.get(i);
-            int index = getSuitableLeaf(place.getLocation());
-            children[index].addPlace(place);
+        for (int i = 0; i < numOfPlaces; i++) {
+            int leaf = getSuitableLeaf(placeXs[i], placeYs[i]);
+            children[leaf].addPlace(placeXs[i], placeYs[i], Service.decodeService(placeServices[i]));
         }
-        places.clear();
+        numOfPlaces = 0;
     }
 
-    public void addPlace(Place place) {
-        if (!boundary.contains(place.getLocation())) {
-            throw new IllegalArgumentException("Place " + place + " is out of the bounds of the quad tree");
-        }
-
-        if (places.size() < MAX_CAPACITY && children[0] == null) {
-            places.add(place);
+    public void addPlace(int x, int y, String[] services) {
+        if (children[0] != null) {
+            int leaf = getSuitableLeaf(x, y);
+            children[leaf].addPlace(x, y, services);
         } else {
-            if (children[0] == null) {
+            if (numOfPlaces < CAPACITY) {
+                placeXs[numOfPlaces] = x;
+                placeYs[numOfPlaces] = y;
+                placeServices[numOfPlaces] = Service.encodeService(services);
+                numOfPlaces++;
+            } else {
                 split();
+                addPlace(x, y, services);
             }
-            int index = getSuitableLeaf(place.getLocation());
-            children[index].addPlace(place);
         }
     }
 
-    public boolean removePlace(Place place) {
-        if (!boundary.contains(place.getLocation())) {
-            return false;
-        }
-
-        if (children[0] == null) {
-            return places.remove(place);
+    public boolean editPlace(int x, int y, String[] services) {
+        if (children[0] != null) {
+            int leaf = getSuitableLeaf(x, y);
+            children[leaf].editPlace(x, y, services);
         } else {
-            int index = getSuitableLeaf(place.getLocation());
-            if (index != -1) {
-                return children[index].removePlace(place);
+            for (int i = 0; i < numOfPlaces; i++) {
+                if (placeXs[i] == x && placeYs[i] == y) {
+                    placeServices[i] = Service.encodeService(services);
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
-    private Place findPlace(Point2D point) {
-        if (!boundary.contains(point)) {
-            return null;
-        }
-
-        if (children[0] == null) {
-            for (int i = 0; i < places.size(); i++) {
-                Place place = places.get(i);
-                if (place.getLocation().equals(point)) {
-                    return place;
+    public boolean removePlace(int x, int y) {
+        if (children[0] != null) {
+            int leaf = getSuitableLeaf(x, y);
+            return children[leaf].removePlace(x, y);
+        } else {
+            for (int i = 0; i < numOfPlaces; i++) {
+                if (placeXs[i] == x && placeYs[i] == y) {
+                    placeXs[i] = placeXs[numOfPlaces - i - 1];
+                    placeYs[i] = placeYs[numOfPlaces - i - 1];
+                    placeServices[i] = placeServices[numOfPlaces - i - 1];
+                    numOfPlaces--;
+                    return true;
                 }
             }
-        } else {
-            int index = getSuitableLeaf(point);
-            if (index != -1) {
-                return children[index].findPlace(point);
+        }
+        return false;
+    }
+
+    public ArrayList<Place> searchPlace(int userX, int userY, int walkDistance, String[] services, int k) {
+        Rectangle boundaryRect = new Rectangle(userX - walkDistance, userY + walkDistance, walkDistance * 2, walkDistance * 2);
+        ArrayList<Place> results = new ArrayList<>();
+        searchPlace(boundaryRect, services, results);
+
+        sortPlaceList(results, 0, results.size() - 1, userX, userY);
+        ArrayList<Place> kResults = new ArrayList<>();
+        for (int i = 0; i < k && i < results.size(); i++) {
+            kResults.add(results.get(i));
+        }
+        return kResults;
+    }
+
+    private void searchPlace(Rectangle boundaryRect, String[] services, ArrayList<Place> results) {
+        if (!boundaryRect.intersects(boundary)) {
+            return;
+        }
+        for (int i = 0; i < numOfPlaces; i++) {
+            if (boundaryRect.contains(placeXs[i], placeYs[i]) && Service.contains(placeServices[i], Service.encodeService(services))) {
+                results.add(new Place(placeXs[i], placeYs[i], Service.decodeService(placeServices[i])));
             }
         }
-
-        return null;
-    }
-
-    public boolean updatePlace(Place place) {
-        return true;
-    }
-
-    // Find maximum 50 places within the boundary rectangle that offer the specified service
-    // Then, display the place list in ascending order of distance from the user location
-    public ArrayList<Place> searchPlace(Point2D userLocation, Rectangle boundaryRectangle, Service service) {
-        ArrayList<Place> results = new ArrayList();
-        searchPlace(results, boundaryRectangle, service);
-        sortPlacesByDistances(results, 0, results.size() - 1, userLocation);
-        return results;
-    }
-
-    private ArrayList<Place> searchPlace(ArrayList<Place> results, Rectangle boundaryRectangle, Service service) {
-        if (!boundary.intersect(boundaryRectangle)) {
-            return results;
-        }
-
-        if (children[0] == null) {
-            for (int i = 0; i < places.size(); i++) {
-                Place place = places.get(i);
-                if (boundaryRectangle.contains(place.getLocation()) && place.offersService(service)) {
-                    results.add(place);
-                }
-            }
-        } else {
-            for (int i = 0; i < 4; i++) {
-                children[i].searchPlace(results, boundaryRectangle, service);
+        if (children[0] != null) {
+            for (QuadTree child : children) {
+                child.searchPlace(boundaryRect, services, results);
             }
         }
-
-        return results;
     }
 
-    // Quick sort algorithm to sort places based on distances from the user location
-    private void sortPlacesByDistances(ArrayList<Place> places, int minIndex, int maxIndex, Point2D userLocation) {
-        if (minIndex < maxIndex) {
-            int pivotIndex = partition(places, minIndex, maxIndex, userLocation);
-            sortPlacesByDistances(places, minIndex, pivotIndex - 1, userLocation);
-            sortPlacesByDistances(places, pivotIndex + 1, maxIndex, userLocation);
+    private void sortPlaceList(ArrayList<Place> places, int low, int high, int userX, int userY) {
+        if (low < high) {
+            int pivot = partition(places, low, high, userX, userY);
+            sortPlaceList(places, low, pivot - 1, userX, userY);
+            sortPlaceList(places, pivot + 1, high, userX, userY);
         }
     }
 
-    private int partition(ArrayList<Place> places, int minIndex, int maxIndex, Point2D userLocation) {
-        Place pivot = places.get(maxIndex);
-        int i = minIndex - 1;
-        for (int j = minIndex; j < maxIndex; j++) {
-            if (places.get(j).getLocation().distanceTo(userLocation) < pivot.getLocation().distanceTo(userLocation)) {
+    private int partition(ArrayList<Place> places, int low, int high, int userX, int userY) {
+        Place pivot = places.get(high);
+        int i = low - 1;
+        for (int j = low; j < high; j++) {
+            if (places.get(j).distanceTo(userX, userY) < pivot.distanceTo(userX, userY)) {
                 i++;
                 Place temp = places.get(i);
                 places.set(i, places.get(j));
@@ -152,8 +147,15 @@ public class QuadTree {
             }
         }
         Place temp = places.get(i + 1);
-        places.set(i + 1, places.get(maxIndex));
-        places.set(maxIndex, temp);
+        places.set(i + 1, places.get(high));
+        places.set(high, temp);
         return i + 1;
+    }
+
+    public void displayPlaceList(ArrayList<Place> places, int userX, int userY) {
+        for (int i = 0; i < places.size(); i++) {
+            Place place = places.get(i);
+            System.out.println("Place " + (i + 1) + " at (" + place.getX() + ", " + place.getY() + ") is " + place.distanceTo(userX, userY) + " units away");
+        }
     }
 }

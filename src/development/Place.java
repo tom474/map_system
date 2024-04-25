@@ -1,48 +1,36 @@
 package development;
 
 public class Place {
-    private String name;
-    private Point2D location;
-    private boolean[] services;     // Boolean array to track which services are offered
+    private int x;
+    private int y;
+    private int service;
 
-    public Place(String name, Point2D location, Service[] services) {
-        this.name = name;
-        this.location = location;
-        this.services = new boolean[Service.size()];    // Initialize the boolean array for services
-        for (Service service : services) {
-            addService(service);     // Add each service to the list of offered services
-        }
+    public Place(int x, int y, String[] services) {
+        this.x = x;
+        this.y = y;
+        setServices(services);
     }
 
-    public String getName() {
-        return name;
+    public int getX() {
+        return x;
     }
 
-    public Point2D getLocation() {
-        return location;
+    public int getY() {
+        return y;
     }
 
-    public Service[] getServices() {
-        Service[] offeredServices = new Service[Service.values().length];
-        int count = 0;
-        for (int i = 0; i < services.length; i++) {
-            if (services[i]) {
-                offeredServices[count] = Service.values()[i];
-                count++;
-            }
-        }
-        return offeredServices;
+    public String[] getServices() {
+        return Service.decodeService(service);
     }
 
-    public boolean offersService(Service service) {
-        return services[service.ordinal()];     // Return the service availability based on its ordinal
+    public void setServices(String[] services) {
+        service = Service.encodeService(services);
     }
 
-    public void addService(Service service) {
-        services[service.ordinal()] = true;     // Mark the service as offered
-    }
+    public double distanceTo(int x, int y) {
+        double result = Math.sqrt(Math.pow(this.x - x, 2) + Math.pow(this.y - y, 2));
 
-    public void removeService(Service service) {
-        services[service.ordinal()] = false;    // Mark the service as not offered
+        // Return 2 digits after the decimal point
+        return Math.round(result * 100.0) / 100.0;
     }
 }
