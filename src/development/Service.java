@@ -13,23 +13,6 @@ public class Service {
     public static final int School = 8;
     public static final int ConvenienceStore = 9;
 
-    private static int getServiceID(String service) {
-        int result = switch (service) {
-            case "ATM" -> ATM;
-            case "Restaurant" -> Restaurant;
-            case "Hospital" -> Hospital;
-            case "Park" -> Park;
-            case "ShoppingMall" -> ShoppingMall;
-            case "BusStation" -> BusStation;
-            case "Library" -> Library;
-            case "Pharmacy" -> Pharmacy;
-            case "School" -> School;
-            case "ConvenienceStore" -> ConvenienceStore;
-            default -> -1;
-        };
-        return result;
-    }
-
     public static int encodeService(String[] services) {
         return 1 << services.length - 1;
     }

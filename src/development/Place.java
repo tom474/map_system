@@ -3,12 +3,12 @@ package development;
 public class Place {
     private int x;
     private int y;
-    private int service;
+    private int services;
 
-    public Place(int x, int y, String[] services) {
+    public Place(int x, int y, int services) {
         this.x = x;
         this.y = y;
-        setServices(services);
+        this.services = services;
     }
 
     public int getX() {
@@ -19,12 +19,12 @@ public class Place {
         return y;
     }
 
-    public String[] getServices() {
-        return Service.decodeService(service);
+    public int getServices() {
+        return services;
     }
 
-    public void setServices(String[] services) {
-        service = Service.encodeService(services);
+    public void setServices(int services) {
+        this.services = services;
     }
 
     public double distanceTo(int x, int y) {

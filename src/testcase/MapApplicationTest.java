@@ -18,7 +18,7 @@ public class MapApplicationTest {
         for (int i = 0; i < NUM_POINTS; i++) {
             int x = random.nextInt(MAX_COORDINATE);
             int y = random.nextInt(MAX_COORDINATE);
-            String[] serviceType = generateRandomService();
+            int serviceType = generateRandomService();
             quadTree.addPlace(x, y, serviceType);
         }
         long endMemoryUse = runtime.totalMemory() - runtime.freeMemory();
@@ -29,7 +29,7 @@ public class MapApplicationTest {
         // Add an additional place
         int additionalX = 5_000_000;
         int additionalY = 5_000_000;
-        String[] additionalService = {"ATM", "Restaurant"};
+        int additionalService = generateRandomService();
         long additionalInsertStart = System.currentTimeMillis();
         quadTree.addPlace(additionalX, additionalY, additionalService);
         long additionalInsertEnd = System.currentTimeMillis();
@@ -62,24 +62,12 @@ public class MapApplicationTest {
         quadTree.displayPlaceList(results, userX, userY);
     }
 
-    private static String[] generateRandomService() {
+    private static int generateRandomService() {
         int numServices = random.nextInt(Service.NUM_SERVICES) + 1;
-        String[] services = new String[numServices];
+        int result = 0;
         for (int i = 0; i < numServices; i++) {
-            services[i] = switch (random.nextInt(Service.NUM_SERVICES)) {
-                case Service.ATM -> "ATM";
-                case Service.Restaurant -> "Restaurant";
-                case Service.Hospital -> "Hospital";
-                case Service.Park -> "Park";
-                case Service.ShoppingMall -> "ShoppingMall";
-                case Service.BusStation -> "BusStation";
-                case Service.Library -> "Library";
-                case Service.Pharmacy -> "Pharmacy";
-                case Service.School -> "School";
-                case Service.ConvenienceStore -> "ConvenienceStore";
-                default -> "Unknown";
-            };
+            result |= 1 << random.nextInt(Service.NUM_SERVICES);
         }
-        return services;
+        return result;
     }
 }

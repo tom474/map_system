@@ -5,15 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="141b3c40-7381-4c12-bd1f-ee9a761d0f19" name="Changes" comment="Restructure files and try to optimize code (but fail)">
-      <change afterPath="$PROJECT_DIR$/src/testcase/MapApplicationTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/development/ArrayList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/development/ArrayList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/development/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/development/Place.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/development/Point2D.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/development/QuadTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/development/QuadTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/development/Rectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/development/Rectangle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/development/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/development/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/testcase/MapApplicationWith100MPlaces.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/testcase/MapApplicationTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/testcase/MapApplicationTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +28,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="pnm_dev" />
+        <entry key="$PROJECT_DIR$" value="optimize_attempt1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />

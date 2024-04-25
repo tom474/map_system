@@ -1,7 +1,7 @@
 package development;
 
 public class QuadTree {
-    private static final int CAPACITY = 10_000_000;
+    private static final int CAPACITY = 10_000;
     private final Rectangle boundary;
     private final QuadTree[] children;
     private int numOfPlaces;
@@ -43,12 +43,12 @@ public class QuadTree {
 
         for (int i = 0; i < numOfPlaces; i++) {
             int leaf = getSuitableLeaf(placeXs[i], placeYs[i]);
-            children[leaf].addPlace(placeXs[i], placeYs[i], Service.decodeService(placeServices[i]));
+            children[leaf].addPlace(placeXs[i], placeYs[i], placeServices[i]);
         }
         numOfPlaces = 0;
     }
 
-    public void addPlace(int x, int y, String[] services) {
+    public void addPlace(int x, int y, int services) {
         if (children[0] != null) {
             int leaf = getSuitableLeaf(x, y);
             children[leaf].addPlace(x, y, services);
@@ -56,7 +56,7 @@ public class QuadTree {
             if (numOfPlaces < CAPACITY) {
                 placeXs[numOfPlaces] = x;
                 placeYs[numOfPlaces] = y;
-                placeServices[numOfPlaces] = Service.encodeService(services);
+                placeServices[numOfPlaces] = services;
                 numOfPlaces++;
             } else {
                 split();
@@ -117,7 +117,7 @@ public class QuadTree {
         }
         for (int i = 0; i < numOfPlaces; i++) {
             if (boundaryRect.contains(placeXs[i], placeYs[i]) && Service.contains(placeServices[i], Service.encodeService(services))) {
-                results.add(new Place(placeXs[i], placeYs[i], Service.decodeService(placeServices[i])));
+                results.add(new Place(placeXs[i], placeYs[i], placeServices[i]));
             }
         }
         if (children[0] != null) {
